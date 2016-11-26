@@ -8,23 +8,30 @@ def help():
     print 'cartel-generation.py -c <input-csv-file> -o <output-svg-file>'
 
 def main(argv):
-   inputfile = ''
-   outputfile = ''
-   try:
-      opts, args = getopt.getopt(argv,"hc:o:",["csv=","osvg="])
-   except getopt.GetoptError:
-      help()
-      sys.exit(2)
-   for opt, arg in opts:
-      if opt == '-h':
-         help()
-         sys.exit()
-      elif opt in ("-c", "--csv"):
-         inputfile = arg
-      elif opt in ("-o", "--osvg"):
-         outputfile = arg
-   print 'Input csv file is "', inputfile
-   print 'Output svg file is "', outputfile
+    inputcsvfile = ''
+    outputsvgfile = ''
+    try:
+        opts, args = getopt.getopt(argv,"hi:o:",["icsv=","osvg="])
+    except getopt.GetoptError:
+        help()
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            help()
+            sys.exit()
+        elif opt in ("-i", "--icsv"):
+            inputcsvfile = arg
+        elif opt in ("-o", "--osvg"):
+            outputsvgfile = arg
+
+    if outputsvgfile == "" or inputcsvfile == "":
+        print "You have to give input and output parameters"
+        print " "
+        help()
+        sys.exit(3)
+
+    print 'Input csv file is "'+inputcsvfile+'"'
+    print 'Output svg file is "'+outputsvgfile+'"'
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])
