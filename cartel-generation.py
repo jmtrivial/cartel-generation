@@ -145,13 +145,13 @@ class FinalDocument:
 			
 				
 		
-		# go to nex line
+		# go to next line
 		if(x != 0):
 			y += format_config["1"]["h"]
 			x = 0
 
 
-		for document in filter(lambda x : x._template == "1", self._documents):
+		for document in filter(lambda x : x._template == "2", self._documents):
 			if(x + document.size()["w"] > self._width):
 				# goto new line
 				y += document.size()["h"]
@@ -160,6 +160,11 @@ class FinalDocument:
 				x += document.size()["w"]
 			else:
 				x += document.size()["w"]
+
+		# go to next line
+		if(x != 0):
+			y += format_config["2"]["h"]
+			x = 0
 
 		self._svgContainer = ET.Element("svg", {"version":"1.2", "xmlns:xlink":"http://www.w3.org/1999/xlink", "xmlns":"http://www.w3.org/2000/svg", "height":str(y)+unit, "width":str(self._width)+unit})
 		
@@ -189,6 +194,7 @@ class FinalDocument:
 		# go to nex line
 		if(self._x != 0):
 			self._y += format_config["1"]["h"]
+			self._x = 0
 		
 
 		# insert other template
