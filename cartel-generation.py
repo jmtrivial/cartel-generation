@@ -93,8 +93,18 @@ class CartelContent:
 		elif self._template == "2":
 			cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
 			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_small_hq.jpg"})
-			
-			# TODO: write data
+
+			author = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:15px", "x":"1cm", "y":"1.2cm"}).text = self._author.decode('utf-8')
+
+			titleBox =  ET.SubElement(cartel, "flowRoot")
+			titleBoxRegion = ET.SubElement(titleBox, "flowRegion")
+			titleBoxRegionShape =  ET.SubElement(titleBoxRegion, "rect", {"width":"8.5cm", "height":"2.5cm", "x":"1cm", "y":"1.8cm"})
+			title = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:24px" }).text = self._title.decode('utf-8')
+			date = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:17px" }).text = self._date.decode('utf-8')
+
+			media = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:12px", "x":"9.8cm", "y":"5cm"}).text = self._technique.decode('utf-8')
+
+			collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:12px", "x":"9.8cm", "y":"5.5cm"}).text = self._collection.decode('utf-8')
 		
 		cornerTopLeft = ET.SubElement(cartel, "path", {"style":"fill:none;fill-rule:evenodd;stroke:#696866;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1", "d":"M 20 0 L 0 0 L 0 20"})
 
@@ -207,7 +217,13 @@ def loadCartelDescriptions(csvfile):
 		for row in spamreader:
 			if row and len(row) == 8:
 				auteur, titre, date, technique, dimensions, collection, template, description = row
-				result.append(CartelContent(auteur, titre, date, description, technique + ", " + dimensions, collection, template)) 
+				techniqueDimension = technique
+				if dimensions != "":
+					if techniqueDimension == "":
+						techniqueDimension = dimensions
+					else:
+						techniqueDimension = technique + ", " + dimensions
+				result.append(CartelContent(auteur, titre, date, description, techniqueDimension, collection, template)) 
 			else:
 				print "Ignore line" + str(row)
 	return result
