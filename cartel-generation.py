@@ -65,13 +65,7 @@ class CartelContent:
 
 	def heightWithUnit(self):
 		return str(format_config[self._template]["h"]) + unit
-
-	# def render(self, x ,y):
-	# 	if(self._template == "1"):
-	# 		print "render 2"
-	# 	elif(self._template == "2"):
-	# 		print "render 2"
-		
+	
 
 	def render(self, rootXML, x, y):
 		cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
