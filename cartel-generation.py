@@ -43,11 +43,11 @@ format_config = {
 	"2": {"w":10, "h":6}
 }
 unit = "cm"
-
+maxLengthBottomLine = 55
 
 
 class CartelContent:
-	def __init__(self, author, title, date, description, technique, collection, template):
+	def __init__(self, author, title, date, description, technique, dimensions, collection, template):
 
 		self._template = template
 		self._author = author
@@ -55,6 +55,7 @@ class CartelContent:
 		self._date = date
 		self._description = description
 		self._technique = technique
+		self._dimensions = dimensions
 		self._collection = collection
 
 	def size(self): 
@@ -86,7 +87,13 @@ class CartelContent:
 			descBoxRegionShape =  ET.SubElement(descBoxRegion, "rect", {"width":"17cm", "height":"5.5cm", "x":"2cm", "y":"7.5cm"})
 			text = ET.SubElement(descBox, "flowPara", { "style":avenirStyleJustified + "font-size:21px" }).text = self._description.decode('utf-8')
 
-			media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._technique.decode('utf-8')
+			print self._title, (len(self._technique) + len(self._dimensions) + len(self._collection))
+			if len(self._technique) + len(self._dimensions) + len(self._collection) > maxLengthBottomLine:
+				technique = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"12.7cm"}).text = self._technique.decode('utf-8')
+				dimensions = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._dimensions.decode('utf-8')
+			else:
+				media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = str.join(", ", [self._technique, self._dimensions]).decode('utf-8')
+			
 
 			collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = self._collection.decode('utf-8')
 
@@ -102,9 +109,9 @@ class CartelContent:
 			title = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:24px" }).text = self._title.decode('utf-8')
 			date = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:17px" }).text = self._date.decode('utf-8')
 
-			media = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:12px", "x":"9.8cm", "y":"5cm"}).text = self._technique.decode('utf-8')
+			media = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:12px", "x":"9.6cm", "y":"5cm"}).text = self._technique.decode('utf-8')
 
-			collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:12px", "x":"9.8cm", "y":"5.5cm"}).text = self._collection.decode('utf-8')
+			collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:12px", "x":"9.6cm", "y":"5.5cm"}).text = self._collection.decode('utf-8')
 		
 		cornerTopLeft = ET.SubElement(cartel, "path", {"style":"fill:none;fill-rule:evenodd;stroke:#696866;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1", "d":"M 20 0 L 0 0 L 0 20"})
 
@@ -217,13 +224,7 @@ def loadCartelDescriptions(csvfile):
 		for row in spamreader:
 			if row and len(row) == 8:
 				auteur, titre, date, technique, dimensions, collection, template, description = row
-				techniqueDimension = technique
-				if dimensions != "":
-					if techniqueDimension == "":
-						techniqueDimension = dimensions
-					else:
-						techniqueDimension = technique + ", " + dimensions
-				result.append(CartelContent(auteur, titre, date, description, techniqueDimension, collection, template)) 
+				result.append(CartelContent(auteur, titre, date, description, technique, dimensions, collection, template)) 
 			else:
 				print "Ignore line" + str(row)
 	return result
