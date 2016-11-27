@@ -200,7 +200,7 @@ class FinalDocument:
 def loadCartelDescriptions(csvfile):
 	result = []
 	with open(csvfile, 'rb') as csvcontent:
-		spamreader = csv.reader(csvcontent, delimiter='|', quotechar=' ')
+		spamreader = csv.reader(csvcontent, delimiter='|', quoting=csv.QUOTE_NONE)
 		for row in spamreader:
 			if row and len(row) == 8:
 				auteur, titre, date, technique, dimensions, collection, template, description = row
@@ -210,14 +210,21 @@ def loadCartelDescriptions(csvfile):
 	return result
 
 def help():
+	print 'Command line:'
 	print 'cartel-generation.py -c <input-csv-file> [-s <intermediate-svg-file> -o <output-pdf-file>]'
+	print "Generate  a svg (then a pdf if required) from a csv description."
+	print " "
+	print "Options"
+	print "   -c, --icsv=INPUTFILE  input CSV file. Separator: \"|\", no quotes arround each cell."
+	print "   -s, --svg=INPUTFILE   output SVG file (default: document.svg)"
+	print "   -o, --opdf=INPUTFILE  output PDF file"
 
 def main(argv):
 
 	
 	inputcsvfile = ''
 	outputsvgfile = 'document.svg'
-	outputpdffile = 'document.pdf'
+	outputpdffile = ''
 	try:
 		opts, args = getopt.getopt(argv,"hi:s:o:",["icsv=","svg=", "opdf="])
 	except getopt.GetoptError:
@@ -241,6 +248,8 @@ def main(argv):
 		help()
 		sys.exit(3)
 
+
+
 	print 'Loading input csv file "'+inputcsvfile+'"'
 	try:
 		cartelDescriptions = loadCartelDescriptions(inputcsvfile)
@@ -258,9 +267,10 @@ def main(argv):
 	print 'Save final document as "'+outputsvgfile+'"'
 	finalDocument.render(outputsvgfile)
 	
-	# export in PDF the generated SVG, using the inkscape command line 
-	# choose 300dpi and convert text to paths
-	subprocess.call(["inkscape", "-A", "document.pdf", "document.svg", "-d", "300", "-T"])
+	if outputpdffile:
+		# export in PDF the generated SVG, using the inkscape command line 
+		# choose 300dpi and convert text to paths
+		subprocess.call(["inkscape", "-A", "document.pdf", "document.svg", "-d", "300", "-T"])
 
 
 
