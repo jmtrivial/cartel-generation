@@ -91,7 +91,7 @@ class CartelContent:
 				technique = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"12.7cm"}).text = self._technique.decode('utf-8')
 				dimensions = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._dimensions.decode('utf-8')
 			else:
-				media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = str.join(", ", [self._technique, self._dimensions]).decode('utf-8')
+				media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = str.join(", ", filter(None, [self._technique, self._dimensions])).decode('utf-8')
 			
 
 			collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = self._collection.decode('utf-8')
