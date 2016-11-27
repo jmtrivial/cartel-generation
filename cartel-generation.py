@@ -213,7 +213,7 @@ def loadCartelDescriptions(csvfile):
 		for row in spamreader:
 			if row and len(row) == 8:
 				auteur, titre, date, technique, dimensions, collection, template, description = row
-				result.append(CartelContent(auteur, titre, date, description, technique + " " + dimensions, collection, template)) 
+				result.append(CartelContent(auteur, titre, date, description, technique + ", " + dimensions, collection, template)) 
 			else:
 				print "Ignore line" + str(row)
 	return result
