@@ -33,9 +33,10 @@ import subprocess
 
 
 
-avenirStyle = "font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Medium';text-align:start;writing-mode:lr-tb;"
-avenirStyleLeft = avenirStyle+"text-anchor:start;"
-avenirStyleRight = avenirStyle+"text-anchor:end;"
+avenirStyle = "font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Medium';writing-mode:lr-tb;"
+avenirStyleLeft = avenirStyle+"text-anchor:start;text-align:start;"
+avenirStyleRight = avenirStyle+"text-anchor:end;text-align:start;"
+avenirStyleJustified = avenirStyle+"text-anchor:end;text-align:justify;"
 
 format_config = {
 	"1": {"w":20, "h":15},
@@ -74,26 +75,34 @@ class CartelContent:
 
 	def render(self, rootXML, x, y):
 		cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
-		image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_bg_big.png"})
+		
+		if self._template == "1":
+			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_bg_big.png"})
+		
+			author = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"2cm"}).text = self._author.decode('utf-8')
 
-		author = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"2cm"}).text = self._author.decode('utf-8')
+			titleBox =  ET.SubElement(cartel, "flowRoot")
+			titleBoxRegion = ET.SubElement(titleBox, "flowRegion")
+			titleBoxRegionShape =  ET.SubElement(titleBoxRegion, "rect", {"width":"17cm", "height":"4cm", "x":"2cm", "y":"2.8cm"})
+			title = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:40px" }).text = self._title.decode('utf-8')
+			date = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:23px" }).text = self._date.decode('utf-8')
 
-		titleBox =  ET.SubElement(cartel, "flowRoot")
-		titleBoxRegion = ET.SubElement(titleBox, "flowRegion")
-		titleBoxRegionShape =  ET.SubElement(titleBoxRegion, "rect", {"width":"17cm", "height":"4cm", "x":"2cm", "y":"2.8cm"})
-		title = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:40px" }).text = self._title.decode('utf-8')
-		date = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:23px" }).text = self._date.decode('utf-8')
+			descBox =  ET.SubElement(cartel, "flowRoot")
+			descBoxRegion = ET.SubElement(descBox, "flowRegion")
+			descBoxRegionShape =  ET.SubElement(descBoxRegion, "rect", {"width":"17cm", "height":"5.5cm", "x":"2cm", "y":"7.5cm"})
+			text = ET.SubElement(descBox, "flowPara", { "style":avenirStyleJustified + "font-size:21px" }).text = self._description.decode('utf-8')
 
-		descBox =  ET.SubElement(cartel, "flowRoot")
-		descBoxRegion = ET.SubElement(descBox, "flowRegion")
-		descBoxRegionShape =  ET.SubElement(descBoxRegion, "rect", {"width":"17cm", "height":"5.5cm", "x":"2cm", "y":"7.5cm"})
-		text = ET.SubElement(descBox, "flowPara", { "style":avenirStyleLeft + "font-size:21px" }).text = self._description.decode('utf-8')
+			media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._technique.decode('utf-8')
 
-		media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._technique.decode('utf-8')
+			collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = self._collection.decode('utf-8')
 
-		collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = self._collection.decode('utf-8')
-
-		cornerTopLeft = ET.SubElement(cartel, "path", {"style":"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1", "d":"M 20 0 L 0 0 L 0 20"})
+		elif self._template == "2":
+			cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
+			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_bg_big.png"})
+			
+			# TODO: write data
+		
+		cornerTopLeft = ET.SubElement(cartel, "path", {"style":"fill:none;fill-rule:evenodd;stroke:#696866;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1", "d":"M 20 0 L 0 0 L 0 20"})
 
 
 
