@@ -198,74 +198,70 @@ class FinalDocument:
 
 
 def loadCartelDescriptions(csvfile):
-	result = list()
+	result = []
 	with open(csvfile, 'rb') as csvcontent:
-		spamreader = csv.reader(csvcontent, delimiter=' ', quotechar='|')
+		spamreader = csv.reader(csvcontent, delimiter='|', quotechar=' ')
 		for row in spamreader:
-			auteur, titre, date, technique, dimensions, collection, template = row;
-			result.append(CartelContent(auteur, titre, date, technique, dimensions, collection, template)) 
+			if row and len(row) == 8:
+				auteur, titre, date, technique, dimensions, collection, template, description = row
+				result.append(CartelContent(auteur, titre, date, description, technique + " " + dimensions, collection, template)) 
+			else:
+				print "Ignore line" + str(row)
 	return result
 
 def help():
-	print 'cartel-generation.py -c <input-csv-file> -o <output-svg-file>'
+	print 'cartel-generation.py -c <input-csv-file> [-s <intermediate-svg-file> -o <output-pdf-file>]'
 
 def main(argv):
-	row = ["Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale", "1"]
-	l = []
-	auteur, titre, date, description, technique, collection, template = row
-	l.append(CartelContent(auteur, titre, date, description, technique, collection, template))
-	l.append(CartelContent(auteur, titre, date, description, technique, collection, template))
-	l.append(CartelContent(auteur, titre, date, description, technique, collection, template))
-	l.append(CartelContent(auteur, titre, date, description, technique, collection, template))
-	l.append(CartelContent(auteur, titre, date, description, technique, collection, template))
-	l.append(CartelContent(auteur, titre, date, description, technique, collection, template))
 
-	doc = FinalDocument(l)
-	doc.render()
+	
+	inputcsvfile = ''
+	outputsvgfile = 'document.svg'
+	outputpdffile = 'document.pdf'
+	try:
+		opts, args = getopt.getopt(argv,"hi:s:o:",["icsv=","svg=", "opdf="])
+	except getopt.GetoptError:
+		print "Error while reading parameters. Abort."
+		help()
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt == '-h':
+			help()
+			sys.exit()
+		elif opt in ("-i", "--icsv"):
+			inputcsvfile = arg
+		elif opt in ("-s", "--svg"):
+			outputsvgfile = arg
+		elif opt in ("-o", "--odf"):
+			outputpdffile = arg
 
+	if inputcsvfile == "":
+		print "You have to give an input csv file."
+		print " "
+		help()
+		sys.exit(3)
 
+	print 'Loading input csv file "'+inputcsvfile+'"'
+	try:
+		cartelDescriptions = loadCartelDescriptions(inputcsvfile)
+	except ValueError as e:
+		print "Error while reading csv file:", e
+		print "Abort"
+		sys.exit(4)
+	except:
+		print "Error while reading csv file. Abort."
+		sys.exit(4)
+	
+	print "Initialize final document"
+	finalDocument = FinalDocument(cartelDescriptions)
+
+	print 'Save final document as "'+outputsvgfile+'"'
+	finalDocument.render(outputsvgfile)
+	
 	# export in PDF the generated SVG, using the inkscape command line 
 	# choose 300dpi and convert text to paths
 	subprocess.call(["inkscape", "-A", "document.pdf", "document.svg", "-d", "300", "-T"])
-	
-	# inputcsvfile = ''
-	# outputsvgfile = ''
-	# try:
-	# 	opts, args = getopt.getopt(argv,"hi:o:",["icsv=","osvg="])
-	# except getopt.GetoptError:
-	# 	print "Error while reading parameters. Abort."
-	# 	help()
-	# 	sys.exit(2)
-	# for opt, arg in opts:
-	# 	if opt == '-h':
-	# 		help()
-	# 		sys.exit()
-	# 	elif opt in ("-i", "--icsv"):
-	# 		inputcsvfile = arg
-	# 	elif opt in ("-o", "--osvg"):
-	# 		outputsvgfile = arg
 
-	# if outputsvgfile == "" or inputcsvfile == "":
-	# 	print "You have to give input and output parameters."
-	# 	print " "
-	# 	help()
-	# 	sys.exit(3)
-
-	# print 'Loading input csv file "'+inputcsvfile+'"'
-	# try:
-	# 	cartelDescriptions = loadCartelDescriptions(inputcsvfile)
-
-	# except:
-	# 	print "Error while reading csv file. Abort."
-	# 	sys.exit(4)
-	
-	# print "Initialize final document"
-	# finalDocument = FinalDocument(cartelDescriptions)
-
-	# print 'Save final document as "'+outputsvgfile+'"'
-	# finalDocument.generate(outputsvgfile)
-	
-	
 
 
 if __name__ == "__main__":
