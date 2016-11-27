@@ -220,11 +220,11 @@ def loadCartelDescriptions(csvfile):
 
 def help():
 	print 'Command line:'
-	print 'cartel-generation.py -c <input-csv-file> [-s <intermediate-svg-file> -o <output-pdf-file>]'
+	print 'cartel-generation.py -i <input-csv-file> [-s <intermediate-svg-file> -o <output-pdf-file>]'
 	print "Generate  a svg (then a pdf if required) from a csv description."
 	print " "
 	print "Options"
-	print "   -c, --icsv=INPUTFILE  input CSV file. Separator: \"|\", no quotes arround each cell."
+	print "   -i, --icsv=INPUTFILE  input CSV file. Separator: \"|\", no quotes arround each cell."
 	print "   -s, --svg=INPUTFILE   output SVG file (default: document.svg)"
 	print "   -o, --opdf=INPUTFILE  output PDF file"
 
