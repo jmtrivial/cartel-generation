@@ -9,7 +9,7 @@ avenirStyleLeft = avenirStyle+"text-anchor:start;"
 avenirStyleRight = avenirStyle+"text-anchor:end;"
 
 
-def addCartel(root, x, y, txtAuthor, txtTitle, txtDate, txtText, txtMedia, txtCollection):
+def addLargeCartel(root, x, y, txtAuthor, txtTitle, txtDate, txtText, txtMedia, txtCollection):
 	cartel = ET.SubElement(root, "svg",  {"height":"15cm", "width":"20cm", "x":x, "y":y})
 	image = ET.SubElement(cartel, "image", {"height":"15cm", "width":"20cm", "x":"0cm", "y":"0cm", "xlink:href":"../img/vermont_bg_big.png"})
 
@@ -34,10 +34,10 @@ def addCartel(root, x, y, txtAuthor, txtTitle, txtDate, txtText, txtMedia, txtCo
 
 root = ET.Element("svg", {"version":"1.1", "xmlns:xlink":"http://www.w3.org/1999/xlink", "xmlns":"http://www.w3.org/2000/svg", "height":"30cm", "width":"40cm"})
 
-addCartel(root, "0cm", "0cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
-addCartel(root, "20cm", "0cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
-addCartel(root, "0cm", "15cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
-addCartel(root, "20cm", "15cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "0cm", "0cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "20cm", "0cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "0cm", "15cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "20cm", "15cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
 
 
 tree = ET.ElementTree(root)
