@@ -87,7 +87,6 @@ class CartelContent:
 			descBoxRegionShape =  ET.SubElement(descBoxRegion, "rect", {"width":"17cm", "height":"5.5cm", "x":"2cm", "y":"7.5cm"})
 			text = ET.SubElement(descBox, "flowPara", { "style":avenirStyleJustified + "font-size:21px" }).text = self._description.decode('utf-8')
 
-			print self._title, (len(self._technique) + len(self._dimensions) + len(self._collection))
 			if len(self._technique) + len(self._dimensions) + len(self._collection) > maxLengthBottomLine:
 				technique = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"12.7cm"}).text = self._technique.decode('utf-8')
 				dimensions = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._dimensions.decode('utf-8')
