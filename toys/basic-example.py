@@ -1,13 +1,44 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-import svgwrite
-
-
-dwg = svgwrite.Drawing(filename = "example.svg", size = ("20cm", "15cm"))
-
-dwg.add(dwg.image("../img/vermont_bg_big.png", insert = ("0cm", "0cm"), size = ("20cm", "15cm")))
-name = dwg.text("Roget Jourdain  (1845-1918)", insert = ("66", "77"), style = "font-style:normal;font-weight:normal;font-size:21.84115791px;line-height:125%;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1")
-dwg.add(name)
+import xml.etree.cElementTree as ET
 
 
-dwg.save()
+avenirStyle = "font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Medium';text-align:start;writing-mode:lr-tb;"
+avenirStyleLeft = avenirStyle+"text-anchor:start;"
+avenirStyleRight = avenirStyle+"text-anchor:end;"
+
+
+def addLargeCartel(root, x, y, txtAuthor, txtTitle, txtDate, txtText, txtMedia, txtCollection):
+	cartel = ET.SubElement(root, "svg",  {"height":"15cm", "width":"20cm", "x":x, "y":y})
+	image = ET.SubElement(cartel, "image", {"height":"15cm", "width":"20cm", "x":"0cm", "y":"0cm", "xlink:href":"../img/vermont_bg_big.png"})
+
+	author = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"2cm"}).text = txtAuthor.decode('utf-8')
+
+	titleBox =  ET.SubElement(cartel, "flowRoot")
+	titleBoxRegion = ET.SubElement(titleBox, "flowRegion")
+	titleBoxRegionShape =  ET.SubElement(titleBoxRegion, "rect", {"width":"17cm", "height":"4cm", "x":"2cm", "y":"2.8cm"})
+	title = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:40px" }).text = txtTitle.decode('utf-8')
+	date = ET.SubElement(titleBox, "flowPara", { "style":avenirStyleLeft + "font-size:23px" }).text = txtDate.decode('utf-8')
+
+	descBox =  ET.SubElement(cartel, "flowRoot")
+	descBoxRegion = ET.SubElement(descBox, "flowRegion")
+	descBoxRegionShape =  ET.SubElement(descBoxRegion, "rect", {"width":"17cm", "height":"5.5cm", "x":"2cm", "y":"7.5cm"})
+	text = ET.SubElement(descBox, "flowPara", { "style":avenirStyleLeft + "font-size:21px" }).text = txtText.decode('utf-8')
+
+	media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = txtMedia.decode('utf-8')
+
+	collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = txtCollection.decode('utf-8')
+
+
+
+root = ET.Element("svg", {"version":"1.1", "xmlns:xlink":"http://www.w3.org/1999/xlink", "xmlns":"http://www.w3.org/2000/svg", "height":"30cm", "width":"40cm"})
+
+addLargeCartel(root, "0cm", "0cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "20cm", "0cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "0cm", "15cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+addLargeCartel(root, "20cm", "15cm", "Roget Jourdain  (1845-1918)", "Élection du Conseil municipal, tableau récapitulatif des votes", "19ème siècle", "Lorem ipsum dolor sit amet, consectetur adi", "Aquarelle   29,5 x 49,5 cm", "Musée d'histoire locale")
+
+
+tree = ET.ElementTree(root)
+tree.write("example.svg")
