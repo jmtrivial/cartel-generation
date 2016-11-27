@@ -77,7 +77,7 @@ class CartelContent:
 		cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
 		
 		if self._template == "1":
-			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_bg_big.png"})
+			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_big_hq.jpg"})
 		
 			author = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"2cm"}).text = self._author.decode('utf-8')
 
@@ -98,7 +98,7 @@ class CartelContent:
 
 		elif self._template == "2":
 			cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
-			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_bg_big.png"})
+			image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_small_hq.jpg"})
 			
 			# TODO: write data
 		
