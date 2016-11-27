@@ -289,7 +289,8 @@ def main(argv):
 	if outputpdffile:
 		# export in PDF the generated SVG, using the inkscape command line 
 		# choose 300dpi and convert text to paths
-		subprocess.call(["inkscape", "-A", "document.pdf", "document.svg", "-d", "300", "-T"])
+		print 'Save final document as "'+outputpdffile+'"'
+		subprocess.call(["inkscape", "-A", outputpdffile, outputsvgfile, "-d", "300", "-T"])
 
 
 
