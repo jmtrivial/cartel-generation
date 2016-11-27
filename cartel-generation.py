@@ -4,67 +4,111 @@ import csv
 import sys
 import getopt
 import array
+import svgwrite
 
-class Cartel:
-	def __init__(self, row):
-		# TODO: set self._size as "large" or "small"
-		self._size = "large"
-		# TODO set other self._...
-		pass
-	def getSize(self):
-		return self._size
 
-class Format:
-	def __init(self, width, height):
-		self._width = width
-		self._height = height
-	def setNbCartels(self, number):
-		self._number = number
+from abc import ABCMeta
+
+format_config = {
+	"1": {"w":20, "h":15},
+	"2": {"w":10, "h":6}
+}
+
+class CartelTemplate:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def width: raise NotImplementedError
+
+    @abstractmethod
+    def height: raise NotImplementedError
+
+
+class BaseCartelDescription:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def render(self, template): raise NotImplementedError
+
+
+
+class CartelContent:
+	def __init__(self, auteur, titre, date, technique, dimensions, collection, template):
+
+		self._cartelFormat = cartelFormat
+		self._author = author
+		self._title = title
+		self._date = date
+		self._desc = desc
+		self._collection = collection
+		self._meta = meta
+
+	def size: 
+		return format_config[self._cartelFormat]
+
+	def render(self):
+
+		if(self._cartelFormat === "1") {
+			print "render 2"
+		} else if(self._cartelFormat === "2"){
+			print "render 2"
+		}
+
 
 class FinalDocument:
+	def __init__(self, exportPath, documents, height = null, width = 100):
+		self._documents = documents
+		self._height = height
+		self._width = width
+		self._svgContainer = svgwrite.Drawing(exportPath, profile='tiny')
+		self._x = 0
+		self._y = 0
 	
-	def __init__(self, cartelDescriptions):
-		self._format = {}
-		self.addFormat("large", 20, 15)
-		self.addFormat("small", 10, 6)
-		self.initStructure(cartelDescriptions)
-		pass
-	
-	def addFormat(self, formatName, width, height):
-		self._format[formatName] = Cartel(width, height)
+
+	def render(self):
+		# insert first template
+		for document in documents
+			if document._cartelFormat === "1"
+				if(self._x + document.size()["w"] > self._width) {
+					# goto new line
+					self._y += document.size()["h"]
+					# reset x origin
+					self._x = 0
+					self._svgContainer.add(document.render(self._x, self._y))
+					#  
+					self._x += document.size()["w"]
+				} else {
+					self._svgContainer.add(document.render(self._x, self._y))
+					self._x += document.size()["w"]
+				}
 		
-	def initStructure(self, cartelDescriptions):
-		self._cartels = {}
-		for f in self._formats:
-			self._cartels[f.name] = []
-		for desc in cartelDescriptions:
-			cartelSize = desc.getSize()
-			if cartelSize in self._format:
-				self._cartels[cartelSize] = desc
-			else:
-				print "Unknown cartel format"
-			
-	def generate(self, svgfile):
-		computeLayout()
-		# TODO
-		pass
-	def computeLayout(self):
-		# TODO: for each format, get the number of corresponding cartels
-		# compute the number of cartels per line
-		# then compute the number of required lines
-		# then deduce the required height
-		
-		# TODO: then deduce the size of the final document
-		self._documentWidth = 100
-		# self._documentHeight = 
-		
+		# go to nex line
+		if(self._x != 0) {
+			self._y += format_config["1"]["h"]
+		}
+
+		# insert other template
+		for document in documents
+			if document._cartelFormat === "2"
+				if(self._x + document.size.w > self._width) {
+					self._y += document.size.h
+					self._x = 0
+					self._svgContainer.add(document.render())
+				} else {
+					self._svgContainer.add(document.render())
+					self._x += document.size.w
+				}
+
+		self._svgContainer.save()
+
 
 def loadCartelDescriptions(csvfile):
 	result = list()
 	with open(csvfile, 'rb') as csvcontent:
 		spamreader = csv.reader(csvcontent, delimiter=' ', quotechar='|')
 		for row in spamreader:
-			result.append(Cartel(row)) 
+			auteur, titre, date, technique, dimensions, collection, template = row;
+			result.append(CartelContent(auteur, titre, date, technique, dimensions, collection, template)) 
 	return result
 
 def help():
@@ -97,6 +141,7 @@ def main(argv):
 	print 'Loading input csv file "'+inputcsvfile+'"'
 	try:
 		cartelDescriptions = loadCartelDescriptions(inputcsvfile)
+
 	except:
 		print "Error while reading csv file. Abort."
 		sys.exit(4)
