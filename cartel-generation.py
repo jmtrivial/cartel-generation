@@ -74,7 +74,7 @@ class CartelContent:
 
 	def render(self, rootXML, x, y):
 		cartel = ET.SubElement(rootXML, "svg",  {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit})
-		image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":str(x)+unit, "y":str(y)+unit, "xlink:href":"../img/vermont_bg_big.png"})
+		image = ET.SubElement(cartel, "image", {"height":self.heightWithUnit(), "width":self.widthWithUnit(), "x":"0cm", "y":"0cm", "xlink:href":"img/vermont_bg_big.png"})
 
 		author = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"2cm"}).text = self._author.decode('utf-8')
 
@@ -92,6 +92,8 @@ class CartelContent:
 		media = ET.SubElement(cartel, "text", {"style":avenirStyleLeft + "font-size:22px", "x":"2cm", "y":"13.5cm"}).text = self._technique.decode('utf-8')
 
 		collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = self._collection.decode('utf-8')
+
+		cornerTopLeft = ET.SubElement(cartel, "path", {"style":"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1", "d":"M 20 0 L 0 0 L 0 20"})
 
 
 
@@ -142,6 +144,9 @@ class FinalDocument:
 
 		self._svgContainer = ET.Element("svg", {"version":"1.2", "xmlns:xlink":"http://www.w3.org/1999/xlink", "xmlns":"http://www.w3.org/2000/svg", "height":str(y)+unit, "width":str(self._width)+unit})
 		
+		colorProfileDef = ET.SubElement(self._svgContainer, "defs")
+		colorProfile = ET.SubElement(colorProfileDef, "color-profile", { "name":"FOGRA39L-Coated", "xlink:href":"/usr/share/color/icc/colord/FOGRA39L_coated.icc" })
+
 
 
 
