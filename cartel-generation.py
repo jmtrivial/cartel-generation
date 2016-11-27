@@ -7,7 +7,7 @@ import getopt
 import array
 
 import xml.etree.cElementTree as ET
-
+import subprocess
 
 # from abc import ABCMeta
 
@@ -224,6 +224,10 @@ def main(argv):
 	doc.render()
 
 
+	# export in PDF the generated SVG, using the inkscape command line 
+	# choose 300dpi and convert text to paths
+	subprocess.call(["inkscape", "-A", "document.pdf", "document.svg", "-d", "300", "-T"])
+	
 	# inputcsvfile = ''
 	# outputsvgfile = ''
 	# try:
