@@ -30,6 +30,7 @@ def addLargeCartel(root, x, y, txtAuthor, txtTitle, txtDate, txtText, txtMedia, 
 
 	collection = ET.SubElement(cartel, "text", {"style":avenirStyleRight + "font-size:22px", "x":"19cm", "y":"13.5cm"}).text = txtCollection.decode('utf-8')
 
+	cornerTopLeft = ET.SubElement(cartel, "path", {"style":"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1", "d":"M 20 0 L 0 0 L 0 20"})
 
 
 root = ET.Element("svg", {"version":"1.1", "xmlns:xlink":"http://www.w3.org/1999/xlink", "xmlns":"http://www.w3.org/2000/svg", "height":"30cm", "width":"40cm"})
